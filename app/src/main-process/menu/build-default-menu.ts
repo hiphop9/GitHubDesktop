@@ -9,6 +9,11 @@ import { MenuLabelsEvent } from '../../models/menu-labels'
 import * as ipcWebContents from '../ipc-webcontents'
 import { mkdir } from 'fs/promises'
 import { buildTestMenu } from './build-test-menu'
+import {
+  DefaultLanguage,
+  LanguageNames,
+  localizeMenuTemplate,
+} from '../../lib/i18n'
 
 const createPullRequestLabel = __DARWIN__
   ? 'Create Pull Request'
@@ -51,6 +56,7 @@ export function buildDefaultMenuTemplate({
   isStashedChangesVisible = false,
   askForConfirmationWhenStashingAllChanges = true,
   isChangesFilterVisible = true,
+  language = DefaultLanguage,
 }: MenuLabelsEvent): Electron.MenuItemConstructorOptions[] {
   contributionTargetDefaultBranch = truncateWithEllipsis(
     contributionTargetDefaultBranch,
@@ -301,6 +307,27 @@ export function buildDefaultMenuTemplate({
           }
         },
       },
+      separator,
+      {
+        label: 'Language',
+        id: 'language',
+        submenu: [
+          {
+            label: LanguageNames['en'],
+            id: 'language-en',
+            type: 'radio',
+            checked: language === 'en',
+            click: emit('set-language-en'),
+          },
+          {
+            label: LanguageNames['ko'],
+            id: 'language-ko',
+            type: 'radio',
+            checked: language === 'ko',
+            click: emit('set-language-ko'),
+          },
+        ],
+      },
     ],
   })
 
@@ -347,9 +374,14 @@ export function buildDefaultMenuTemplate({
         click: emit('view-repository-on-github'),
       },
       {
-        label: __DARWIN__
-          ? `Open in ${selectedShell ?? 'Shell'}`
-          : `O&pen in ${selectedShell ?? 'shell'}`,
+        label:
+          language === 'ko'
+            ? __DARWIN__
+              ? `${selectedShell ?? '셸'}에서 열기`
+              : `${selectedShell ?? '셸'}에서 열기(&P)`
+            : __DARWIN__
+            ? `Open in ${selectedShell ?? 'Shell'}`
+            : `O&pen in ${selectedShell ?? 'shell'}`,
         id: 'open-in-shell',
         accelerator: 'Ctrl+`',
         click: emit('open-in-shell'),
@@ -365,9 +397,14 @@ export function buildDefaultMenuTemplate({
         click: emit('open-working-directory'),
       },
       {
-        label: __DARWIN__
-          ? `Open in ${selectedExternalEditor ?? 'External Editor'}`
-          : `&Open in ${selectedExternalEditor ?? 'external editor'}`,
+        label:
+          language === 'ko'
+            ? __DARWIN__
+              ? `${selectedExternalEditor ?? '외부 편집기'}에서 열기`
+              : `${selectedExternalEditor ?? '외부 편집기'}에서 열기(&O)`
+            : __DARWIN__
+            ? `Open in ${selectedExternalEditor ?? 'External Editor'}`
+            : `&Open in ${selectedExternalEditor ?? 'external editor'}`,
         id: 'open-external-editor',
         accelerator: 'CmdOrCtrl+Shift+A',
         click: emit('open-external-editor'),
@@ -610,6 +647,11 @@ export function buildDefaultMenuTemplate({
   }
 
   ensureItemIds(template)
+
+  // Translate the menu labels in place *after* ids have been assigned so that
+  // menu-state updates (which key off ids derived from the English labels)
+  // keep working regardless of the selected language.
+  localizeMenuTemplate(template, language)
 
   return template
 }

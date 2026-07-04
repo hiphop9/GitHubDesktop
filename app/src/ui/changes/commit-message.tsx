@@ -6,6 +6,7 @@ import {
   IAutocompletionProvider,
   CoAuthorAutocompletionProvider,
 } from '../autocompletion'
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 import { CommitIdentity } from '../../models/commit-identity'
 import {
   DefaultCommitMessage,
@@ -1500,7 +1501,7 @@ export class CommitMessage extends React.Component<
     const commitVerb = isCommitting ? 'Committing' : 'Commit'
     const isAmending = commitToAmend !== null
 
-    return isAmending ? amendVerb : commitVerb
+    return tr(isAmending ? amendVerb : commitVerb)
   }
 
   private getCommittingButtonText() {
@@ -1516,6 +1517,20 @@ export class CommitMessage extends React.Component<
      * as three separate strings "Verb" and "Count" and "to" and even tho
      * visually it was correctly adding spacings, for screen reader users it was
      * not and putting them all to together as one word. */
+
+    // Korean word order puts the branch first, e.g. "<branch>에 파일 N개 커밋",
+    // so the <strong> branch is rendered before the (single) action string.
+    if (getCurrentLanguage() === 'ko') {
+      const action = `에 ${this.getFilesToBeCommittedButtonText()}${verb}`
+
+      return (
+        <>
+          <strong>{branch}</strong>
+          {action}
+        </>
+      )
+    }
+
     const action = `${verb} ${this.getFilesToBeCommittedButtonText()}to `
 
     return (
@@ -1536,6 +1551,10 @@ export class CommitMessage extends React.Component<
       return ''
     }
 
+    if (getCurrentLanguage() === 'ko') {
+      return `파일 ${filesToBeCommittedCount}개 `
+    }
+
     const pluralizedFile = filesToBeCommittedCount > 1 ? 'files' : 'file'
 
     return `${filesToBeCommittedCount} ${pluralizedFile} `
@@ -1547,6 +1566,10 @@ export class CommitMessage extends React.Component<
 
     if (branch === null) {
       return verb
+    }
+
+    if (getCurrentLanguage() === 'ko') {
+      return `${branch}에 ${verb}`
     }
 
     return `${verb} to ${branch}`
@@ -1571,9 +1594,13 @@ export class CommitMessage extends React.Component<
     }
 
     const isAmending = commitToAmend !== null
-    return isAmending
-      ? `${this.getButtonVerb()} last commit`
-      : this.getCommittingButtonTitle()
+    if (isAmending) {
+      const verb = this.getButtonVerb()
+      return getCurrentLanguage() === 'ko'
+        ? `마지막 커밋 ${verb}`
+        : `${verb} last commit`
+    }
+    return this.getCommittingButtonTitle()
   }
 
   private getButtonTooltip(buttonEnabled: boolean) {
@@ -1781,8 +1808,10 @@ export class CommitMessage extends React.Component<
 
           <AutocompletingInput
             required={true}
-            label={this.props.showInputLabels === true ? 'Summary' : undefined}
-            screenReaderLabel="Commit summary"
+            label={
+              this.props.showInputLabels === true ? tr('Summary') : undefined
+            }
+            screenReaderLabel={tr('Commit summary')}
             className={summaryInputClassName}
             placeholder={placeholder}
             value={this.state.commitMessage.summary}
@@ -1806,7 +1835,7 @@ export class CommitMessage extends React.Component<
         {this.state.isRuleFailurePopoverOpen && this.renderRuleFailurePopover()}
 
         {this.props.showInputLabels === true && (
-          <label htmlFor="commit-message-description">Description</label>
+          <label htmlFor="commit-message-description">{tr('Description')}</label>
         )}
         <FocusContainer
           className="description-focus-container"
@@ -1817,10 +1846,10 @@ export class CommitMessage extends React.Component<
             className={descriptionClassName}
             screenReaderLabel={
               this.props.showInputLabels !== true
-                ? 'Commit description'
+                ? tr('Commit description')
                 : undefined
             }
-            placeholder="Description"
+            placeholder={tr('Description')}
             value={this.state.commitMessage.description || ''}
             onValueChanged={this.onDescriptionChanged}
             autocompletionProviders={

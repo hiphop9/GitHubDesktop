@@ -10,6 +10,7 @@ import { FilesChangedBadge } from './changes/files-changed-badge'
 import { SelectedCommits, CompareSidebar } from './history'
 import { Resizable } from './resizable'
 import { TabBar } from './tab-bar'
+import { tr } from '../lib/i18n'
 import {
   IRepositoryState,
   RepositorySectionTab,
@@ -223,12 +224,12 @@ export class RepositoryView extends React.Component<
     return (
       <TabBar selectedIndex={selectedTab} onTabClicked={this.onTabClicked}>
         <span className="with-indicator" id="changes-tab">
-          <span>Changes</span>
+          <span>{tr('Changes')}</span>
           {this.renderChangesBadge()}
         </span>
 
         <div className="with-indicator" id="history-tab">
-          <span>History</span>
+          <span>{tr('History')}</span>
         </div>
       </TabBar>
     )

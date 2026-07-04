@@ -3,6 +3,7 @@ import * as React from 'react'
 import { Branch } from '../../models/branch'
 
 import { assertNever } from '../../lib/fatal-error'
+import { tr } from '../../lib/i18n'
 
 import { SelectionSource } from '../lib/filter-list'
 import { IMatches } from '../../lib/fuzzy-find'
@@ -387,11 +388,11 @@ export class BranchList extends React.Component<
 
   private getGroupLabel(identifier: BranchGroupIdentifier) {
     if (identifier === 'default') {
-      return __DARWIN__ ? 'Default Branch' : 'Default branch'
+      return tr(__DARWIN__ ? 'Default Branch' : 'Default branch')
     } else if (identifier === 'recent') {
-      return __DARWIN__ ? 'Recent Branches' : 'Recent branches'
+      return tr(__DARWIN__ ? 'Recent Branches' : 'Recent branches')
     } else if (identifier === 'other') {
-      return __DARWIN__ ? 'Other Branches' : 'Other branches'
+      return tr(__DARWIN__ ? 'Other Branches' : 'Other branches')
     } else {
       return assertNever(identifier, `Unknown identifier: ${identifier}`)
     }
@@ -410,7 +411,7 @@ export class BranchList extends React.Component<
   private onRenderNewButton = () => {
     return this.props.canCreateNewBranch ? (
       <Button className="new-branch-button" onClick={this.onCreateNewBranch}>
-        {__DARWIN__ ? 'New Branch' : 'New branch'}
+        {tr(__DARWIN__ ? 'New Branch' : 'New branch')}
       </Button>
     ) : null
   }

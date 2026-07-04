@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 import { Dispatcher } from '../dispatcher'
 import { Repository } from '../../models/repository'
 import { Branch } from '../../models/branch'
@@ -66,7 +67,7 @@ export class RenameBranch extends React.Component<
     return (
       <Dialog
         id="rename-branch"
-        title={__DARWIN__ ? 'Rename Branch' : 'Rename branch'}
+        title={tr(__DARWIN__ ? 'Rename Branch' : 'Rename branch')}
         onDismissed={this.props.onDismissed}
         onSubmit={this.renameBranch}
         focusCloseButtonOnOpen={true}
@@ -74,7 +75,7 @@ export class RenameBranch extends React.Component<
         <DialogContent>
           {renderBranchHasRemoteWarning(this.props.branch)}
           <RefNameTextBox
-            label="Name"
+            label={tr('Name')}
             ariaDescribedBy={hasError ? this.ERRORS_ID : undefined}
             initialValue={this.props.branch.name}
             onValueChange={this.onNameChange}
@@ -89,7 +90,11 @@ export class RenameBranch extends React.Component<
 
         <DialogFooter>
           <OkCancelButtonGroup
-            okButtonText={`Rename ${this.props.branch.name}`}
+            okButtonText={
+              getCurrentLanguage() === 'ko'
+                ? `${this.props.branch.name} 이름 바꾸기`
+                : `Rename ${this.props.branch.name}`
+            }
             okButtonDisabled={disabled}
           />
         </DialogFooter>

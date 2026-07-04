@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { tr } from '../../lib/i18n'
 import { Commit, CommitOneLine, ICommitContext } from '../../models/commit'
 import {
   HistoryTabMode,
@@ -732,11 +733,11 @@ function getPlaceholderText(state: ICompareState) {
   const { branches, formState } = state
 
   if (!branches.some(b => !b.isDesktopForkRemoteBranch)) {
-    return __DARWIN__ ? 'No Branches to Compare' : 'No branches to compare'
+    return tr(__DARWIN__ ? 'No Branches to Compare' : 'No branches to compare')
   } else if (formState.kind === HistoryTabMode.History) {
-    return __DARWIN__
-      ? 'Select Branch to Compare…'
-      : 'Select branch to compare…'
+    return tr(
+      __DARWIN__ ? 'Select Branch to Compare…' : 'Select branch to compare…'
+    )
   } else {
     return undefined
   }

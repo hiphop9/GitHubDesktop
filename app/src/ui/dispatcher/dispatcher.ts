@@ -10,6 +10,7 @@ import {
   IAPICreatePushProtectionBypassResponse,
 } from '../../lib/api'
 import { shell } from '../../lib/app-shell'
+import { Language } from '../../lib/i18n'
 import {
   CompareAction,
   Foldout,
@@ -2143,6 +2144,11 @@ export class Dispatcher {
    */
   public setConfirmRepoRemovalSetting(value: boolean): Promise<void> {
     return this.appStore._setConfirmRepositoryRemovalSetting(value)
+  }
+
+  /** Sets the language used to render the application menu. */
+  public setSelectedLanguage(language: Language): Promise<void> {
+    return this.appStore._setSelectedLanguage(language)
   }
 
   /**

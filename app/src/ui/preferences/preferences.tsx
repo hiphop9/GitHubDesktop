@@ -79,6 +79,7 @@ import {
 } from '../../models/formatting-preferences'
 import { enableFormattingPreferences } from '../../lib/feature-flag'
 import type { Model } from '@github/copilot-sdk/dist/generated/rpc'
+import { tr } from '../../lib/i18n'
 
 interface IPreferencesProps {
   readonly dispatcher: Dispatcher
@@ -348,7 +349,7 @@ export class Preferences extends React.Component<
     return (
       <Dialog
         id="preferences"
-        title={__DARWIN__ ? 'Settings' : 'Options'}
+        title={tr(__DARWIN__ ? 'Settings' : 'Options')}
         onDismissed={this.onCancel}
         onSubmit={this.onSave}
       >
@@ -361,11 +362,11 @@ export class Preferences extends React.Component<
           >
             <span id={this.getTabId(PreferencesTab.Accounts)}>
               <Octicon className="icon" symbol={octicons.home} />
-              Accounts
+              {tr('Accounts')}
             </span>
             <span id={this.getTabId(PreferencesTab.Integrations)}>
               <Octicon className="icon" symbol={octicons.person} />
-              Integrations
+              {tr('Integrations')}
             </span>
             {this.isCopilotSdkEnabled && (
               <span id={this.getTabId(PreferencesTab.Copilot)}>
@@ -379,23 +380,23 @@ export class Preferences extends React.Component<
             </span>
             <span id={this.getTabId(PreferencesTab.Appearance)}>
               <Octicon className="icon" symbol={octicons.paintbrush} />
-              Appearance
+              {tr('Appearance')}
             </span>
             <span id={this.getTabId(PreferencesTab.Notifications)}>
               <Octicon className="icon" symbol={octicons.bell} />
-              Notifications
+              {tr('Notifications')}
             </span>
             <span id={this.getTabId(PreferencesTab.Prompts)}>
               <Octicon className="icon" symbol={octicons.question} />
-              Prompts
+              {tr('Prompts')}
             </span>
             <span id={this.getTabId(PreferencesTab.Advanced)}>
               <Octicon className="icon" symbol={octicons.gear} />
-              Advanced
+              {tr('Advanced')}
             </span>
             <span id={this.getTabId(PreferencesTab.Accessibility)}>
               <Octicon className="icon" symbol={octicons.accessibility} />
-              Accessibility
+              {tr('Accessibility')}
             </span>
           </TabBar>
 
@@ -941,7 +942,7 @@ export class Preferences extends React.Component<
     return (
       <DialogFooter>
         <OkCancelButtonGroup
-          okButtonText="Save"
+          okButtonText={tr('Save')}
           okButtonDisabled={hasDisabledError}
         />
       </DialogFooter>

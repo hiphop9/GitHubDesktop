@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { tr } from '../../lib/i18n'
 import { commitGrammar, RepositoryListItem } from './repository-list-item'
 import {
   groupRepositories,
@@ -376,7 +377,7 @@ export class RepositoriesList extends React.Component<
         ariaExpanded={this.state.newRepositoryMenuExpanded}
         onKeyDown={this.onNewRepositoryButtonKeyDown}
       >
-        Add
+        {tr('Add')}
         <Octicon symbol={octicons.triangleDown} />
       </Button>
     )
@@ -417,17 +418,19 @@ export class RepositoriesList extends React.Component<
   private onNewRepositoryButtonClick = () => {
     const items: IMenuItem[] = [
       {
-        label: __DARWIN__ ? 'Clone Repository…' : 'Clone repository…',
+        label: tr(__DARWIN__ ? 'Clone Repository…' : 'Clone repository…'),
         action: this.onCloneRepository,
       },
       {
-        label: __DARWIN__ ? 'Create New Repository…' : 'Create new repository…',
+        label: tr(
+          __DARWIN__ ? 'Create New Repository…' : 'Create new repository…'
+        ),
         action: this.onCreateNewRepository,
       },
       {
-        label: __DARWIN__
-          ? 'Add Existing Repository…'
-          : 'Add existing repository…',
+        label: tr(
+          __DARWIN__ ? 'Add Existing Repository…' : 'Add existing repository…'
+        ),
         action: this.onAddExistingRepository,
       },
     ]

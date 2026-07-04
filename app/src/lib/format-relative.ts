@@ -1,5 +1,6 @@
 import mem from 'mem'
 import QuickLRU from 'quick-lru'
+import { getCurrentLanguage } from './i18n'
 
 // Initializing a date formatter is expensive but formatting is relatively cheap
 // so we cache them based on the locale and their options. The maxSize of a 100
@@ -15,7 +16,8 @@ const getRelativeFormatter = mem(
 )
 
 export function formatRelative(ms: number) {
-  const formatter = getRelativeFormatter('en-US', { numeric: 'auto' })
+  const locale = getCurrentLanguage() === 'ko' ? 'ko' : 'en-US'
+  const formatter = getRelativeFormatter(locale, { numeric: 'auto' })
 
   const sign = ms < 0 ? -1 : 1
 

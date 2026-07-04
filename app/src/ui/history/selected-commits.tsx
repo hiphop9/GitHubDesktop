@@ -19,6 +19,7 @@ import {
   OpenWithDefaultProgramLabel,
   CopyRelativeFilePathLabel,
 } from '../lib/context-menu'
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 import { ThrottledScheduler } from '../lib/throttled-scheduler'
 
 import { Dispatcher } from '../dispatcher'
@@ -386,9 +387,11 @@ export class SelectedCommits extends React.Component<
     if (!fileExistsOnDisk) {
       showContextualMenu([
         {
-          label: __DARWIN__
-            ? 'File Does Not Exist on Disk'
-            : 'File does not exist on disk',
+          label: tr(
+            __DARWIN__
+              ? 'File Does Not Exist on Disk'
+              : 'File does not exist on disk'
+          ),
           enabled: false,
         },
       ])
@@ -399,12 +402,14 @@ export class SelectedCommits extends React.Component<
 
     const isSafeExtension = isSafeFileExtension(extension)
     const openInExternalEditor = externalEditorLabel
-      ? `Open in ${externalEditorLabel}`
-      : DefaultEditorLabel
+      ? getCurrentLanguage() === 'ko'
+        ? `${externalEditorLabel}에서 열기`
+        : `Open in ${externalEditorLabel}`
+      : tr(DefaultEditorLabel)
 
     const items: IMenuItem[] = [
       {
-        label: RevealInFileManagerLabel,
+        label: tr(RevealInFileManagerLabel),
         action: () => revealInFileManager(repository, file.path),
         enabled: fileExistsOnDisk,
       },
@@ -414,17 +419,17 @@ export class SelectedCommits extends React.Component<
         enabled: fileExistsOnDisk,
       },
       {
-        label: OpenWithDefaultProgramLabel,
+        label: tr(OpenWithDefaultProgramLabel),
         action: () => this.onOpenItem(file.path),
         enabled: isSafeExtension && fileExistsOnDisk,
       },
       { type: 'separator' },
       {
-        label: CopyFilePathLabel,
+        label: tr(CopyFilePathLabel),
         action: () => clipboard.writeText(fullPath),
       },
       {
-        label: CopyRelativeFilePathLabel,
+        label: tr(CopyRelativeFilePathLabel),
         action: () => clipboard.writeText(Path.normalize(file.path)),
       },
       { type: 'separator' },
@@ -441,7 +446,7 @@ export class SelectedCommits extends React.Component<
     }
 
     items.push({
-      label: viewOnGitHubLabel,
+      label: tr(viewOnGitHubLabel),
       action: () => this.onViewOnGitHub(selectedCommits[0].sha, file),
       enabled:
         selectedCommits.length === 1 &&

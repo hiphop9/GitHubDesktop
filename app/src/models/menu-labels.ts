@@ -1,6 +1,14 @@
 import { Shell } from '../lib/shells'
+import { Language } from '../lib/i18n'
 
 export type MenuLabelsEvent = {
+  /**
+   * The language the application menu should be rendered in.
+   *
+   * Omit to fall back to the default (English).
+   */
+  readonly language?: Language
+
   /**
    * Specify the user's selected shell to display in the menu.
    *

@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 import { PullRequest } from '../../models/pull-request'
 import {
   Repository,
@@ -183,10 +184,23 @@ export class BranchesContainer extends React.Component<
         <Button
           className="merge-button"
           onClick={this.onMergeClick}
-          tooltip={`Choose a branch to merge into ${currentBranch.name}`}
+          tooltip={
+            getCurrentLanguage() === 'ko'
+              ? `${currentBranch.name}에 병합할 브랜치 선택`
+              : `Choose a branch to merge into ${currentBranch.name}`
+          }
         >
           <Octicon className="icon" symbol={octicons.gitMerge} />
-          Choose a branch to merge into <strong>{currentBranch.name}</strong>
+          {getCurrentLanguage() === 'ko' ? (
+            <>
+              <strong>{currentBranch.name}</strong>에 병합할 브랜치 선택
+            </>
+          ) : (
+            <>
+              Choose a branch to merge into{' '}
+              <strong>{currentBranch.name}</strong>
+            </>
+          )}
         </Button>
       </Row>
     )
@@ -213,9 +227,9 @@ export class BranchesContainer extends React.Component<
         selectedIndex={this.props.selectedTab}
         allowDragOverSwitching={true}
       >
-        <span id="branches-tab">Branches</span>
+        <span id="branches-tab">{tr('Branches')}</span>
         <span id="pull-requests-tab" className="pull-request-tab">
-          {__DARWIN__ ? 'Pull Requests' : 'Pull requests'}
+          {tr(__DARWIN__ ? 'Pull Requests' : 'Pull requests')}
           {this.renderOpenPullRequestsBubble()}
         </span>
       </TabBar>
@@ -314,7 +328,7 @@ export class BranchesContainer extends React.Component<
       return null
     }
 
-    const label = __DARWIN__ ? 'New Branch' : 'New branch'
+    const label = tr(__DARWIN__ ? 'New Branch' : 'New branch')
 
     return (
       /**

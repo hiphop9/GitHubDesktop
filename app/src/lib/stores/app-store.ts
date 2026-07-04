@@ -306,6 +306,12 @@ import {
 import { IStashEntry, StashedChangesLoadStates } from '../../models/stash-entry'
 import { arrayEquals } from '../equality'
 import { MenuLabelsEvent } from '../../models/menu-labels'
+import {
+  DefaultLanguage,
+  Language,
+  parseLanguage,
+  setCurrentLanguage,
+} from '../i18n'
 import { findRemoteBranchName } from './helpers/find-branch-name'
 import { updateRemoteUrl } from './updates/update-remote-url'
 import {
@@ -464,6 +470,7 @@ const confirmCommitMessageOverrideDefault: boolean = true
 const confirmWorktreeRemovalDefault: boolean = true
 const askToMoveToApplicationsFolderKey: string = 'askToMoveToApplicationsFolder'
 const confirmRepoRemovalKey: string = 'confirmRepoRemoval'
+const selectedLanguageKey: string = 'selectedLanguage'
 const showCommitLengthWarningKey: string = 'showCommitLengthWarning'
 const confirmDiscardChangesKey: string = 'confirmDiscardChanges'
 const confirmDiscardStashKey: string = 'confirmDiscardStash'
@@ -619,6 +626,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     useExternalCredentialHelperDefault
   private askForConfirmationOnRepositoryRemoval: boolean =
     confirmRepoRemovalDefault
+  private selectedLanguage: Language = DefaultLanguage
   private confirmDiscardChanges: boolean = confirmDiscardChangesDefault
   private confirmDiscardChangesPermanently: boolean =
     confirmDiscardChangesPermanentlyDefault
@@ -2390,6 +2398,11 @@ export class AppStore extends TypedBaseStore<IAppState> {
       confirmRepoRemovalDefault
     )
 
+    this.selectedLanguage = parseLanguage(
+      localStorage.getItem(selectedLanguageKey)
+    )
+    setCurrentLanguage(this.selectedLanguage)
+
     // We're planning to flip the default value to false. As such we'll
     // start persisting the current behavior to localstorage, so we
     // can change the default in the future without affecting current
@@ -2804,6 +2817,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
       selectedExternalEditor: useCustomEditor ? null : selectedExternalEditor,
       askForConfirmationOnRepositoryRemoval,
       askForConfirmationOnForcePush,
+      language: this.selectedLanguage,
     }
 
     if (state === null) {
@@ -7432,6 +7446,18 @@ export class AppStore extends TypedBaseStore<IAppState> {
   ): Promise<void> {
     this.askForConfirmationOnRepositoryRemoval = confirmRepoRemoval
     setBoolean(confirmRepoRemovalKey, confirmRepoRemoval)
+
+    this.updateMenuLabelsForSelectedRepository()
+
+    this.emitUpdate()
+
+    return Promise.resolve()
+  }
+
+  public _setSelectedLanguage(language: Language): Promise<void> {
+    this.selectedLanguage = language
+    localStorage.setItem(selectedLanguageKey, language)
+    setCurrentLanguage(language)
 
     this.updateMenuLabelsForSelectedRepository()
 

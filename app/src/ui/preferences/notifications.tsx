@@ -11,6 +11,7 @@ import {
   getNotificationsPermission,
   requestNotificationsPermission,
 } from '../main-process-proxy'
+import { tr } from '../../lib/i18n'
 
 interface INotificationPreferencesProps {
   readonly notificationsEnabled: boolean
@@ -51,9 +52,9 @@ export class Notifications extends React.Component<
     return (
       <DialogContent>
         <div className="advanced-section">
-          <h2>Notifications</h2>
+          <h2>{tr('Notifications')}</h2>
           <Checkbox
-            label="Enable notifications"
+            label={tr('Enable notifications')}
             value={
               this.props.notificationsEnabled
                 ? CheckboxValue.On
@@ -62,8 +63,10 @@ export class Notifications extends React.Component<
             onChange={this.onNotificationsEnabledChanged}
           />
           <p className="settings-description">
-            Allows the display of notifications when high-signal events take
-            place in the current repository.{this.renderNotificationHint()}
+            {tr(
+              'Allows the display of notifications when high-signal events take place in the current repository.'
+            )}
+            {this.renderNotificationHint()}
           </p>
         </div>
       </DialogContent>

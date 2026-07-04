@@ -2,6 +2,7 @@ import * as React from 'react'
 import * as Path from 'path'
 
 import { Dispatcher } from '../dispatcher'
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 import { IMenuItem } from '../../lib/menu-item'
 import { revealInFileManager } from '../../lib/app-shell'
 import { encodePathAsUrl } from '../../lib/path'
@@ -582,7 +583,7 @@ export class FilterChangesList extends React.Component<
     file: WorkingDirectoryFileChange
   ): IMenuItem => {
     return {
-      label: CopyFilePathLabel,
+      label: tr(CopyFilePathLabel),
       action: () => {
         const fullPath = Path.join(this.props.repository.path, file.path)
         clipboard.writeText(fullPath)
@@ -594,7 +595,7 @@ export class FilterChangesList extends React.Component<
     file: WorkingDirectoryFileChange
   ): IMenuItem => {
     return {
-      label: CopyRelativeFilePathLabel,
+      label: tr(CopyRelativeFilePathLabel),
       action: () => clipboard.writeText(Path.normalize(file.path)),
     }
   }
@@ -603,7 +604,7 @@ export class FilterChangesList extends React.Component<
     files: WorkingDirectoryFileChange[]
   ): IMenuItem => {
     return {
-      label: CopySelectedPathsLabel,
+      label: tr(CopySelectedPathsLabel),
       action: () => {
         const fullPaths = files.map(file =>
           Path.join(this.props.repository.path, file.path)
@@ -617,7 +618,7 @@ export class FilterChangesList extends React.Component<
     files: WorkingDirectoryFileChange[]
   ): IMenuItem => {
     return {
-      label: CopySelectedRelativePathsLabel,
+      label: tr(CopySelectedRelativePathsLabel),
       action: () => {
         const paths = files.map(file => Path.normalize(file.path))
         clipboard.writeText(paths.join(EOL))
@@ -629,7 +630,7 @@ export class FilterChangesList extends React.Component<
     file: WorkingDirectoryFileChange
   ): IMenuItem => {
     return {
-      label: RevealInFileManagerLabel,
+      label: tr(RevealInFileManagerLabel),
       action: () => revealInFileManager(this.props.repository, file.path),
       enabled: file.status.kind !== AppFileStatusKind.Deleted,
     }
@@ -642,8 +643,10 @@ export class FilterChangesList extends React.Component<
     const { externalEditorLabel } = this.props
 
     const openInExternalEditor = externalEditorLabel
-      ? `Open in ${externalEditorLabel}`
-      : DefaultEditorLabel
+      ? getCurrentLanguage() === 'ko'
+        ? `${externalEditorLabel}에서 열기`
+        : `Open in ${externalEditorLabel}`
+      : tr(DefaultEditorLabel)
 
     return {
       label: openInExternalEditor,
@@ -793,7 +796,7 @@ export class FilterChangesList extends React.Component<
       this.getRevealInFileManagerMenuItem(file),
       this.getOpenInExternalEditorMenuItem(file, enabled),
       {
-        label: OpenWithDefaultProgramLabel,
+        label: tr(OpenWithDefaultProgramLabel),
         action: () => this.props.onOpenItem(path),
         enabled: enabled && isSafeExtension,
       }
@@ -827,7 +830,7 @@ export class FilterChangesList extends React.Component<
       this.getRevealInFileManagerMenuItem(file),
       this.getOpenInExternalEditorMenuItem(file, enabled),
       {
-        label: OpenWithDefaultProgramLabel,
+        label: tr(OpenWithDefaultProgramLabel),
         action: () => this.props.onOpenItem(path),
         enabled: enabled && isSafeExtension,
       }
@@ -861,7 +864,7 @@ export class FilterChangesList extends React.Component<
     prepopulateCommitSummary: boolean
   ) {
     if (!prepopulateCommitSummary) {
-      return 'Summary (required)'
+      return tr('Summary (required)')
     }
 
     const firstFile = files[0]
@@ -1123,7 +1126,7 @@ export class FilterChangesList extends React.Component<
         }
       >
         <Octicon className="stack-icon" symbol={StashIcon} />
-        <div className="text">Stashed Changes</div>
+        <div className="text">{tr('Stashed Changes')}</div>
         <Octicon symbol={octicons.chevronRight} />
       </button>
     )
@@ -1260,9 +1263,18 @@ export class FilterChangesList extends React.Component<
     const disableAllCheckbox =
       files.length === 0 || isCommitting || rebaseConflictState !== null
 
-    const checkAllLabel = `${
-      visibleFiles !== files.length ? `${formatNumber(visibleFiles)} of ` : ''
-    }
+    const checkAllLabel =
+      getCurrentLanguage() === 'ko'
+        ? visibleFiles !== files.length
+          ? `변경된 파일 ${formatNumber(files.length)}개 중 ${formatNumber(
+              visibleFiles
+            )}개`
+          : `변경된 파일 ${formatNumber(files.length)}개`
+        : `${
+            visibleFiles !== files.length
+              ? `${formatNumber(visibleFiles)} of `
+              : ''
+          }
     ${formatNumber(files.length)} changed file${plural(files.length)}`
 
     return (
@@ -1303,7 +1315,7 @@ export class FilterChangesList extends React.Component<
         <TextBox
           ref={this.onTextBoxRef}
           displayClearButton={true}
-          placeholder={'Filter'}
+          placeholder={tr('Filter')}
           className="filter-list-filter-field"
           onValueChanged={this.onFilterTextChanged}
           onKeyDown={this.onFilterKeyDown}

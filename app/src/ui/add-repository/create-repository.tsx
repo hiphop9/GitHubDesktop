@@ -1,6 +1,7 @@
 import * as React from 'react'
 import * as Path from 'path'
 
+import { tr } from '../../lib/i18n'
 import { Dispatcher } from '../dispatcher'
 import {
   initGitRepository,
@@ -424,13 +425,13 @@ export class CreateRepository extends React.Component<
     return (
       <Row>
         <Select
-          label={__DARWIN__ ? 'Git Ignore' : 'Git ignore'}
+          label={tr(__DARWIN__ ? 'Git Ignore' : 'Git ignore')}
           value={this.state.gitIgnore}
           onChange={this.onGitIgnoreChange}
         >
           {options.map(n => (
             <option key={n} value={n}>
-              {n}
+              {n === NoGitIgnoreValue ? tr('None') : n}
             </option>
           ))}
         </Select>
@@ -449,13 +450,13 @@ export class CreateRepository extends React.Component<
     return (
       <Row>
         <Select
-          label="License"
+          label={tr('License')}
           value={this.state.license}
           onChange={this.onLicenseChange}
         >
           {featuredLicenses.map(l => (
             <option key={l.name} value={l.name}>
-              {l.name}
+              {l.name === NoLicenseValue.name ? tr('None') : l.name}
             </option>
           ))}
           <option disabled={true}>────────────────────</option>
@@ -597,9 +598,9 @@ export class CreateRepository extends React.Component<
     return (
       <Dialog
         id="create-repository"
-        title={
+        title={tr(
           __DARWIN__ ? 'Create a New Repository' : 'Create a new repository'
-        }
+        )}
         loading={this.state.creating}
         onSubmit={this.createRepository}
         onDismissed={this.props.onDismissed}
@@ -621,8 +622,8 @@ export class CreateRepository extends React.Component<
             onFullPathChanged={this.onFullPathChanged}
             onNameChanged={this.onNameChanged}
             onPathChanged={this.onPathChanged}
-            namePlaceholder="repository name"
-            pathPlaceholder="repository path"
+            namePlaceholder={tr('repository name')}
+            pathPlaceholder={tr('repository path')}
             nameAriaDescribedBy="existing-repository-path-error repo-sanitized-name-warning"
             pathAriaDescribedBy="existing-repository-path-error path-is-subfolder-of-repository"
           />
@@ -630,7 +631,7 @@ export class CreateRepository extends React.Component<
           <Row>
             <TextBox
               value={this.state.description}
-              label="Description"
+              label={tr('Description')}
               onValueChanged={this.onDescriptionChanged}
             />
           </Row>
@@ -640,7 +641,7 @@ export class CreateRepository extends React.Component<
 
           <Row>
             <Checkbox
-              label="Initialize this repository with a README"
+              label={tr('Initialize this repository with a README')}
               value={
                 this.state.createWithReadme
                   ? CheckboxValue.On
@@ -659,9 +660,9 @@ export class CreateRepository extends React.Component<
         <DialogFooter>
           {this.renderPathMessage()}
           <OkCancelButtonGroup
-            okButtonText={
+            okButtonText={tr(
               __DARWIN__ ? 'Create Repository' : 'Create repository'
-            }
+            )}
             okButtonDisabled={disabled}
             okButtonAriaDescribedBy="create-repo-path-msg"
           />

@@ -13,6 +13,7 @@ import { DialogContent, DialogPreferredFocusClassName } from '../dialog'
 import { Avatar } from '../lib/avatar'
 import { CallToAction } from '../lib/call-to-action'
 import { getHTMLURL } from '../../lib/api'
+import { tr } from '../../lib/i18n'
 
 interface IAccountsProps {
   readonly accounts: ReadonlyArray<Account>
@@ -57,7 +58,7 @@ export class Accounts extends React.Component<IAccountsProps, {}> {
           this.renderSignIn(SignInType.Enterprise)
         ) : (
           <Button onClick={this.props.onEnterpriseSignIn}>
-            Add GitHub Enterprise account
+            {tr('Add GitHub Enterprise account')}
           </Button>
         )}
       </>
@@ -100,7 +101,7 @@ export class Accounts extends React.Component<IAccountsProps, {}> {
           </div>
         </div>
         <Button onClick={this.logout(account)} className={className}>
-          {__DARWIN__ ? 'Sign Out' : 'Sign out'}
+          {tr(__DARWIN__ ? 'Sign Out' : 'Sign out')}
         </Button>
       </Row>
     )
@@ -120,14 +121,16 @@ export class Accounts extends React.Component<IAccountsProps, {}> {
       case SignInType.DotCom: {
         return (
           <CallToAction
-            actionTitle={signInTitle + ' GitHub.com'}
+            actionTitle={tr(signInTitle + ' GitHub.com')}
             onAction={this.onDotComSignIn}
             // The DotCom account is shown first, so its sign in/out button should be
             // focused initially when the dialog is opened.
             buttonClassName={DialogPreferredFocusClassName}
           >
             <div>
-              Sign in to your GitHub.com account to access your repositories.
+              {tr(
+                'Sign in to your GitHub.com account to access your repositories.'
+              )}
             </div>
           </CallToAction>
         )
@@ -135,12 +138,13 @@ export class Accounts extends React.Component<IAccountsProps, {}> {
       case SignInType.Enterprise:
         return (
           <CallToAction
-            actionTitle={signInTitle + ' GitHub Enterprise'}
+            actionTitle={tr(signInTitle + ' GitHub Enterprise')}
             onAction={this.onEnterpriseSignIn}
           >
             <div>
-              If you are using GitHub Enterprise at work, sign in to it to get
-              access to your repositories.
+              {tr(
+                'If you are using GitHub Enterprise at work, sign in to it to get access to your repositories.'
+              )}
             </div>
           </CallToAction>
         )

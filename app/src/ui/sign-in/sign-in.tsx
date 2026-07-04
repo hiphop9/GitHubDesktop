@@ -8,6 +8,7 @@ import {
   IExistingAccountWarning,
 } from '../../lib/stores'
 import { assertNever } from '../../lib/fatal-error'
+import { tr } from '../../lib/i18n'
 import { Row } from '../lib/row'
 import { TextBox } from '../lib/text-box'
 import { Dialog, DialogError, DialogContent, DialogFooter } from '../dialog'
@@ -34,11 +35,11 @@ const SignInWithBrowserTitle = __DARWIN__
 
 const DefaultTitle = 'Sign in'
 
-const browserSignInInfoContent = (
+const browserSignInInfoContent = () => (
   <p>
-    Your browser will redirect you back to GitHub Desktop once you've signed in.
-    If your browser asks for your permission to launch GitHub Desktop, please
-    allow it.
+    {tr(
+      "Your browser will redirect you back to GitHub Desktop once you've signed in. If your browser asks for your permission to launch GitHub Desktop, please allow it."
+    )}
   </p>
 )
 
@@ -120,14 +121,14 @@ export class SignIn extends React.Component<ISignInProps, ISignInState> {
 
     let primaryButtonText: string
     const stepKind = state.kind
-    const continueWithBrowserLabel = __DARWIN__
-      ? 'Continue With Browser'
-      : 'Continue with browser'
+    const continueWithBrowserLabel = tr(
+      __DARWIN__ ? 'Continue With Browser' : 'Continue with browser'
+    )
 
     switch (state.kind) {
       case SignInStep.EndpointEntry:
         disableSubmit = this.state.endpoint.length === 0
-        primaryButtonText = 'Continue'
+        primaryButtonText = tr('Continue')
         break
       case SignInStep.ExistingAccountWarning:
         primaryButtonText = continueWithBrowserLabel
@@ -160,7 +161,7 @@ export class SignIn extends React.Component<ISignInProps, ISignInState> {
           <Ref>{state.existingAccount.login}</Ref>. If you continue, you will
           first be signed out.
         </p>
-        {browserSignInInfoContent}
+        {browserSignInInfoContent()}
       </DialogContent>
     )
   }
@@ -170,7 +171,7 @@ export class SignIn extends React.Component<ISignInProps, ISignInState> {
       <DialogContent>
         <Row>
           <TextBox
-            label="Enterprise address"
+            label={tr('Enterprise address')}
             value={this.state.endpoint}
             onValueChanged={this.onEndpointChanged}
             placeholder="https://example.ghe.com"
@@ -192,7 +193,7 @@ export class SignIn extends React.Component<ISignInProps, ISignInState> {
     return (
       <DialogContent>
         {credentialHelperInfo}
-        {browserSignInInfoContent}
+        {browserSignInInfoContent()}
       </DialogContent>
     )
   }
@@ -231,10 +232,11 @@ export class SignIn extends React.Component<ISignInProps, ISignInState> {
       <DialogError>{state.error.message}</DialogError>
     ) : null
 
-    const title =
+    const title = tr(
       this.props.signInState.kind === SignInStep.Authentication
         ? SignInWithBrowserTitle
         : DefaultTitle
+    )
 
     return (
       <Dialog
