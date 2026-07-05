@@ -3,6 +3,7 @@ import * as Path from 'path'
 import { assertNever } from '../../../lib/fatal-error'
 
 import { getPartialBlobContents } from '../../../lib/git/show'
+import { decodeGitBuffer } from '../../../lib/git/decode-buffer'
 import { readPartialFile } from '../../../lib/file-system'
 import { highlight } from '../../../lib/highlighter/worker'
 import { ITokens } from '../../../lib/highlighter/types'
@@ -121,8 +122,8 @@ export async function getFileContents(
 
   return {
     file,
-    oldContents: oldContents?.toString('utf8').split(/\r?\n/) ?? [],
-    newContents: newContents?.toString('utf8').split(/\r?\n/) ?? [],
+    oldContents: oldContents ? decodeGitBuffer(oldContents).split(/\r?\n/) : [],
+    newContents: newContents ? decodeGitBuffer(newContents).split(/\r?\n/) : [],
     canBeExpanded:
       newContents !== null &&
       newContents.length <= MaxDiffExpansionNewContentLength,

@@ -1,5 +1,6 @@
 import * as Path from 'path'
 
+import { decodeGitBuffer } from './decode-buffer'
 import { getBlobContents } from './show'
 
 import { Repository } from '../../models/repository'
@@ -570,7 +571,7 @@ export async function getFilesDiffText(
   }
 
   // `.toString()` in a promise in case its a large buffer
-  const outputString = await (async () => stdout.toString('utf8'))()
+  const outputString = await (async () => decodeGitBuffer(stdout))()
   return outputString
 }
 
@@ -753,9 +754,7 @@ function parseLineEndingsWarning(error: Buffer): LineEndingsChange | undefined {
  * Parses the output from a diff-like command that uses `--path-with-raw`
  */
 function diffFromRawDiffOutput(output: Buffer): IRawDiff {
-  // for now we just assume the diff is UTF-8, but given we have the raw buffer
-  // we can try and convert this into other encodings in the future
-  const result = output.toString('utf-8')
+  const result = decodeGitBuffer(output)
 
   const pieces = result.split('\0')
   const parser = new DiffParser()
