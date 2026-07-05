@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { encodePathAsUrl } from '../../lib/path'
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 import { Repository } from '../../models/repository'
 import { LinkButton } from '../lib/link-button'
 import { MenuIDs } from '../../models/menu-ids'
@@ -220,7 +221,12 @@ export class NoChanges extends React.Component<
   private renderDiscoverabilityElements(menuItem: IMenuItemInfo) {
     const parentMenusText = formatParentMenuLabel(menuItem)
 
-    return (
+    return getCurrentLanguage() === 'ko' ? (
+      <>
+        {parentMenusText} 메뉴 또는{' '}
+        {this.renderDiscoverabilityKeyboardShortcut(menuItem)}
+      </>
+    ) : (
       <>
         {parentMenusText} menu or{' '}
         {this.renderDiscoverabilityKeyboardShortcut(menuItem)}
@@ -268,7 +274,9 @@ export class NoChanges extends React.Component<
 
     return this.renderMenuBackedAction(
       'open-working-directory',
-      `View the files of your repository in ${fileManager}`,
+      getCurrentLanguage() === 'ko'
+        ? `${fileManager}에서 저장소 파일 보기`
+        : `View the files of your repository in ${fileManager}`,
       undefined,
       this.onShowInFileManagerClicked
     )
@@ -286,7 +294,7 @@ export class NoChanges extends React.Component<
 
     return this.renderMenuBackedAction(
       'view-repository-on-github',
-      `Open the repository page on GitHub in your browser`,
+      tr('Open the repository page on GitHub in your browser'),
       undefined,
       this.onViewOnGitHubClicked
     )
@@ -322,16 +330,20 @@ export class NoChanges extends React.Component<
       return null
     }
 
-    const title = `Open the repository in your external editor`
+    const title = tr('Open the repository in your external editor')
 
-    const description = (
-      <>
-        Select your editor in{' '}
-        <LinkButton onClick={this.openIntegrationPreferences}>
-          {__DARWIN__ ? 'Settings' : 'Options'}
-        </LinkButton>
-      </>
+    const editorLink = (
+      <LinkButton onClick={this.openIntegrationPreferences}>
+        {tr(__DARWIN__ ? 'Settings' : 'Options')}
+      </LinkButton>
     )
+
+    const description =
+      getCurrentLanguage() === 'ko' ? (
+        <>{editorLink}에서 편집기를 선택하세요</>
+      ) : (
+        <>Select your editor in {editorLink}</>
+      )
 
     return this.renderMenuBackedAction(
       itemId,
@@ -435,11 +447,11 @@ export class NoChanges extends React.Component<
     return (
       <MenuBackedSuggestedAction
         key="view-stash-action"
-        title="View your stashed changes"
+        title={tr('View your stashed changes')}
         menuItemId={itemId}
         description={description}
         discoverabilityContent={discoverabilityContent}
-        buttonText="View stash"
+        buttonText={tr('View stash')}
         type="primary"
         disabled={menuItem !== null && !menuItem.enabled}
         onClick={this.onViewStashClicked}
@@ -473,10 +485,12 @@ export class NoChanges extends React.Component<
     return (
       <MenuBackedSuggestedAction
         key="publish-repository-action"
-        title="Publish your repository to GitHub"
-        description="This repository is currently only available on your local machine. By publishing it on GitHub you can share it, and collaborate with others."
+        title={tr('Publish your repository to GitHub')}
+        description={tr(
+          'This repository is currently only available on your local machine. By publishing it on GitHub you can share it, and collaborate with others.'
+        )}
         discoverabilityContent={discoverabilityContent}
-        buttonText="Publish repository"
+        buttonText={tr('Publish repository')}
         menuItemId={itemId}
         type="primary"
         disabled={!menuItem.enabled}
@@ -522,11 +536,11 @@ export class NoChanges extends React.Component<
     return (
       <MenuBackedSuggestedAction
         key="publish-branch-action"
-        title="Publish your branch"
+        title={tr('Publish your branch')}
         menuItemId={itemId}
         description={description}
         discoverabilityContent={discoverabilityContent}
-        buttonText="Publish branch"
+        buttonText={tr('Publish branch')}
         type="primary"
         disabled={!menuItem.enabled}
         onClick={this.onPublishBranchClicked}
@@ -769,10 +783,11 @@ export class NoChanges extends React.Component<
         <div className="content">
           <div className="interstitial-header">
             <div className="text">
-              <h1>No local changes</h1>
+              <h1>{tr('No local changes')}</h1>
               <p>
-                There are no uncommitted changes in this repository. Here are
-                some friendly suggestions for what to do next.
+                {tr(
+                  'There are no uncommitted changes in this repository. Here are some friendly suggestions for what to do next.'
+                )}
               </p>
             </div>
             <img src={PaperStackImage} className="blankslate-image" alt="" />

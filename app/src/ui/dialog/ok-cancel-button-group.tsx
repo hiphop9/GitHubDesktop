@@ -1,6 +1,7 @@
 import * as React from 'react'
 import classNames from 'classnames'
 import { Button } from '../lib/button'
+import { tr } from '../../lib/i18n'
 
 interface IOkCancelButtonGroupProps {
   /**
@@ -150,7 +151,7 @@ export class OkCancelButtonGroup extends React.Component<
         type={this.props.destructive === true ? 'button' : 'submit'}
         ariaDescribedBy={this.props.okButtonAriaDescribedBy}
       >
-        {this.props.okButtonText || 'Ok'}
+        {this.props.okButtonText || tr('Ok')}
       </Button>
     )
   }
@@ -167,7 +168,7 @@ export class OkCancelButtonGroup extends React.Component<
         tooltip={this.props.cancelButtonTitle}
         type={this.props.destructive === true ? 'submit' : 'reset'}
       >
-        {this.props.cancelButtonText || 'Cancel'}
+        {this.props.cancelButtonText || tr('Cancel')}
       </Button>
     )
   }

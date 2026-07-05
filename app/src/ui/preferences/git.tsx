@@ -12,6 +12,7 @@ import {
   shellFriendlyNames,
   SupportedHooksEnvShell,
 } from '../../lib/hooks/config'
+import { tr } from '../../lib/i18n'
 
 interface IGitProps {
   readonly name: string
@@ -77,7 +78,7 @@ export class Git extends React.Component<IGitProps> {
     return (
       <>
         <Checkbox
-          label="Load Git hook environment variables from shell"
+          label={tr('Load Git hook environment variables from shell')}
           ariaDescribedBy="git-hooks-env-description"
           value={
             this.props.enableGitHookEnv ? CheckboxValue.On : CheckboxValue.Off
@@ -85,18 +86,16 @@ export class Git extends React.Component<IGitProps> {
           onChange={this.onEnableGitHookEnvChanged}
         />
         <p id="git-hooks-env-description" className="settings-description">
-          When enabled, GitHub Desktop will attempt to load environment
-          variables from your shell when executing Git hooks. This is useful if
-          your Git hooks depend on environment variables set in your shell
-          configuration files, a common practice for version managers such as
-          nvm, rbenv, asdf, etc.
+          {tr(
+            'When enabled, GitHub Desktop will attempt to load environment variables from your shell when executing Git hooks. This is useful if your Git hooks depend on environment variables set in your shell configuration files, a common practice for version managers such as nvm, rbenv, asdf, etc.'
+          )}
         </p>
 
         {this.props.enableGitHookEnv && __WIN32__ && (
           <>
             <Select
               className="git-hook-shell-select"
-              label={'Shell to use when loading environment'}
+              label={tr('Shell to use when loading environment')}
               value={this.props.selectedShell}
               onChange={this.onSelectedShellChanged}
             >
@@ -114,7 +113,7 @@ export class Git extends React.Component<IGitProps> {
         {this.props.enableGitHookEnv && (
           <>
             <Checkbox
-              label="Cache Git hook environment variables"
+              label={tr('Cache Git hook environment variables')}
               ariaDescribedBy="git-hooks-cache-description"
               onChange={this.onCacheGitHookEnvChanged}
               value={
@@ -128,8 +127,9 @@ export class Git extends React.Component<IGitProps> {
               id="git-hooks-cache-description"
               className="settings-description"
             >
-              Cache hook environment variables to improve performance. Disable
-              if your hooks rely on frequently changing environment variables.
+              {tr(
+                'Cache hook environment variables to improve performance. Disable if your hooks rely on frequently changing environment variables.'
+              )}
             </div>
           </>
         )}
@@ -144,9 +144,9 @@ export class Git extends React.Component<IGitProps> {
           selectedIndex={this.selectedTabIndex}
           onTabClicked={this.onTabClicked}
         >
-          <span>Author</span>
-          <span>Default branch</span>
-          <span>Hooks</span>
+          <span>{tr('Author')}</span>
+          <span>{tr('Default branch')}</span>
+          <span>{tr('Hooks')}</span>
         </TabBar>
         <div className="git-preferences-content">{this.renderCurrentTab()}</div>
       </DialogContent>
@@ -185,7 +185,7 @@ export class Git extends React.Component<IGitProps> {
     return (
       <div className="default-branch-component">
         <h2 id="default-branch-heading">
-          Default branch name for new repositories
+          {tr('Default branch name for new repositories')}
         </h2>
 
         <RefNameTextBox

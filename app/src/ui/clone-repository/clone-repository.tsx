@@ -1,5 +1,6 @@
 import * as Path from 'path'
 import * as React from 'react'
+import { tr } from '../../lib/i18n'
 import { Dispatcher } from '../dispatcher'
 import { getDefaultDir, setDefaultDir } from '../lib/default-dir'
 import {
@@ -264,7 +265,7 @@ export class CloneRepository extends React.Component<
     return (
       <Dialog
         className="clone-repository"
-        title={__DARWIN__ ? 'Clone a Repository' : 'Clone a repository'}
+        title={tr(__DARWIN__ ? 'Clone a Repository' : 'Clone a repository')}
         onSubmit={this.clone}
         onDismissed={this.props.onDismissed}
         loading={this.state.loading}
@@ -325,7 +326,10 @@ export class CloneRepository extends React.Component<
 
     return (
       <DialogFooter>
-        <OkCancelButtonGroup okButtonText="Clone" okButtonDisabled={disabled} />
+        <OkCancelButtonGroup
+          okButtonText={tr('Clone')}
+          okButtonDisabled={disabled}
+        />
       </DialogFooter>
     )
   }
@@ -516,13 +520,15 @@ export class CloneRepository extends React.Component<
   }
 
   private renderSignIn(tab: CloneRepositoryTab) {
-    const signInTitle = __DARWIN__ ? 'Sign In' : 'Sign in'
+    const signInTitle = tr(__DARWIN__ ? 'Sign In' : 'Sign in')
     switch (tab) {
       case CloneRepositoryTab.DotCom:
         return (
           <CallToAction actionTitle={signInTitle} onAction={this.signInDotCom}>
             <div>
-              Sign in to your GitHub.com account to access your repositories.
+              {tr(
+                'Sign in to your GitHub.com account to access your repositories.'
+              )}
             </div>
           </CallToAction>
         )
@@ -533,8 +539,9 @@ export class CloneRepository extends React.Component<
             onAction={this.signInEnterprise}
           >
             <div>
-              If you are using GitHub Enterprise at work, sign in to it to get
-              access to your repositories.
+              {tr(
+                'If you are using GitHub Enterprise at work, sign in to it to get access to your repositories.'
+              )}
             </div>
           </CallToAction>
         )

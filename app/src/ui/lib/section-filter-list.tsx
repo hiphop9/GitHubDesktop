@@ -1,5 +1,6 @@
 import * as React from 'react'
 import classnames from 'classnames'
+import { tr } from '../../lib/i18n'
 
 import { SectionList, ClickSource } from '../lib/list/section-list'
 import {
@@ -281,7 +282,7 @@ export class SectionFilterList<
         displayClearButton={true}
         prefixedIcon={octicons.search}
         autoFocus={true}
-        placeholder={this.props.placeholderText || 'Filter'}
+        placeholder={this.props.placeholderText || tr('Filter')}
         className="filter-list-filter-field"
         onValueChanged={this.onFilterValueChanged}
         onEnterPressed={this.onEnterPressed}

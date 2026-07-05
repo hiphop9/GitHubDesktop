@@ -1,5 +1,6 @@
 import * as React from 'react'
 import * as Path from 'path'
+import { tr } from '../../lib/i18n'
 import { Dispatcher } from '../dispatcher'
 import { addSafeDirectory, getRepositoryType } from '../../lib/git'
 import { Button } from '../lib/button'
@@ -223,7 +224,7 @@ export class AddExistingRepository extends React.Component<
     return (
       <Dialog
         id="add-existing-repository"
-        title={__DARWIN__ ? 'Add Local Repository' : 'Add local repository'}
+        title={tr(__DARWIN__ ? 'Add Local Repository' : 'Add local repository')}
         onSubmit={this.addRepository}
         onDismissed={this.props.onDismissed}
         loading={this.state.isTrustingRepository}
@@ -233,19 +234,19 @@ export class AddExistingRepository extends React.Component<
             <TextBox
               ref={this.pathTextBoxRef}
               value={this.state.path}
-              label={__DARWIN__ ? 'Local Path' : 'Local path'}
-              placeholder="repository path"
+              label={tr(__DARWIN__ ? 'Local Path' : 'Local path')}
+              placeholder={tr('repository path')}
               onValueChanged={this.onPathChanged}
               ariaDescribedBy="add-existing-repository-path-error"
             />
-            <Button onClick={this.showFilePicker}>Choose…</Button>
+            <Button onClick={this.showFilePicker}>{tr('Choose…')}</Button>
           </Row>
           {this.renderErrors()}
         </DialogContent>
 
         <DialogFooter>
           <OkCancelButtonGroup
-            okButtonText={__DARWIN__ ? 'Add Repository' : 'Add repository'}
+            okButtonText={tr(__DARWIN__ ? 'Add Repository' : 'Add repository')}
           />
         </DialogFooter>
       </Dialog>

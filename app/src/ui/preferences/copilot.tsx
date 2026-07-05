@@ -29,6 +29,7 @@ import * as octicons from '../octicons/octicons.generated'
 import { TabBar } from '../tab-bar'
 import { CopilotModelSelectionInfo } from './copilot-model-selection-info'
 import type { Model } from '@github/copilot-sdk/dist/generated/rpc'
+import { tr } from '../../lib/i18n'
 
 interface ICopilotPreferencesProps {
   readonly selectedCopilotModels: CopilotModelSelections
@@ -134,8 +135,8 @@ export class CopilotPreferences extends React.Component<
           selectedIndex={this.state.selectedTabIndex}
           onTabClicked={this.onTabClicked}
         >
-          <span>Models</span>
-          <span>Providers</span>
+          <span>{tr('Models')}</span>
+          <span>{tr('Providers')}</span>
         </TabBar>
         <div className="copilot-tab-content">
           <div className="copilot-section">{this.renderCurrentTab()}</div>
@@ -204,23 +205,27 @@ export class CopilotPreferences extends React.Component<
     switch (accessState) {
       case 'signed-out':
         return this.renderAccessCallToAction(
-          'Sign in to an account with a Copilot license to configure Copilot settings.',
-          'Sign In',
+          tr(
+            'Sign in to an account with a Copilot license to configure Copilot settings.'
+          ),
+          tr('Sign In'),
           this.props.onSignIn,
           DialogPreferredFocusClassName
         )
       case 'checking':
-        return <p>Checking Copilot access…</p>
+        return <p>{tr('Checking Copilot access…')}</p>
       case 'no-license':
         return this.renderAccessCallToAction(
-          'Copilot features in GitHub Desktop require a GitHub Copilot license.',
-          'View Copilot plans',
+          tr('Copilot features in GitHub Desktop require a GitHub Copilot license.'),
+          tr('View Copilot plans'),
           this.props.onOpenCopilotPlans
         )
       case 'desktop-disabled':
         return this.renderAccessCallToAction(
-          'A Copilot license is available for your account, but "Copilot in GitHub Desktop" is disabled in your Copilot feature settings.',
-          'Open Copilot feature settings',
+          tr(
+            'A Copilot license is available for your account, but "Copilot in GitHub Desktop" is disabled in your Copilot feature settings.'
+          ),
+          tr('Open Copilot feature settings'),
           this.props.onOpenCopilotFeatureSettings
         )
       case 'enabled':
@@ -251,11 +256,11 @@ export class CopilotPreferences extends React.Component<
     const { copilotModels, byokProviders } = this.props
 
     if (copilotModels === null) {
-      return <p>Loading available models…</p>
+      return <p>{tr('Loading available models…')}</p>
     }
 
     if (!hasCopilotModelPickerItems(copilotModels, byokProviders)) {
-      return <p>No Copilot models available.</p>
+      return <p>{tr('No Copilot models available.')}</p>
     }
 
     return (
@@ -272,15 +277,17 @@ export class CopilotPreferences extends React.Component<
         {this.renderFeatureModelPicker(
           copilotModels,
           'commit-message-generation',
-          __DARWIN__
-            ? 'Commit Message Generation'
-            : 'Commit message generation',
+          tr(
+            __DARWIN__
+              ? 'Commit Message Generation'
+              : 'Commit message generation'
+          ),
           this.onCommitMessageModelChanged,
           350
         )}
         <p className="settings-description">
           <LinkButton uri="https://docs.github.com/en/desktop/making-changes-in-a-branch/committing-and-reviewing-changes-to-your-project-in-github-desktop#write-a-commit-message-and-push-your-changes">
-            Learn more about generating commit messages.
+            {tr('Learn more about generating commit messages.')}
           </LinkButton>
         </p>
         {enableCopilotConflictResolution() && (
@@ -288,19 +295,19 @@ export class CopilotPreferences extends React.Component<
             {this.renderFeatureModelPicker(
               copilotModels,
               'conflict-resolution',
-              __DARWIN__ ? 'Conflict Resolution' : 'Conflict resolution',
+              tr(__DARWIN__ ? 'Conflict Resolution' : 'Conflict resolution'),
               this.onConflictResolutionModelChanged,
               280
             )}
             <p className="settings-description">
-              Model changes apply to future conflict resolutions.
+              {tr('Model changes apply to future conflict resolutions.')}
             </p>
             <Checkbox
-              label={
+              label={tr(
                 __DARWIN__
                   ? 'Always Use Copilot When Conflicts Are Detected'
                   : 'Always use Copilot when conflicts are detected'
-              }
+              )}
               value={
                 this.props.alwaysUseCopilotForConflictResolution
                   ? CheckboxValue.On
@@ -424,9 +431,9 @@ export class CopilotPreferences extends React.Component<
       <>
         {byokProviders.length === 0 ? (
           <p className="copilot-byok-empty">
-            Add a custom provider to use your own API keys with
-            OpenAI-compatible endpoints, Azure, Anthropic, or local providers
-            like Ollama.
+            {tr(
+              'Add a custom provider to use your own API keys with OpenAI-compatible endpoints, Azure, Anthropic, or local providers like Ollama.'
+            )}
           </p>
         ) : (
           <ul className="copilot-byok-entry-list">
@@ -434,7 +441,7 @@ export class CopilotPreferences extends React.Component<
           </ul>
         )}
         <Button onClick={this.onAddBYOKProviderClick}>
-          {__DARWIN__ ? 'Add Provider…' : 'Add provider…'}
+          {tr(__DARWIN__ ? 'Add Provider…' : 'Add provider…')}
         </Button>
       </>
     )
@@ -450,7 +457,7 @@ export class CopilotPreferences extends React.Component<
           <div className="copilot-byok-entry-title">
             <span>{provider.name}</span>
             {isLocal && (
-              <span className="copilot-byok-provider-badge">Local</span>
+              <span className="copilot-byok-provider-badge">{tr('Local')}</span>
             )}
           </div>
           <span className="copilot-byok-entry-meta">

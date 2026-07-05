@@ -19,6 +19,7 @@ import classNames from 'classnames'
 import { RepoRulesMetadataFailures } from '../../models/repo-rules'
 import { RepoRulesMetadataFailureList } from '../repository-rules/repo-rules-failure-list'
 import { Account } from '../../models/account'
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 
 export type CommitMessageAvatarWarningType =
   | 'none'
@@ -243,24 +244,52 @@ export class CommitMessageAvatar extends React.Component<
     const settings = isGitConfigLocal
       ? 'repository settings'
       : `git ${settingsName}`
-    const buttonText = __DARWIN__ ? 'Open Git Settings' : 'Open git settings'
+    const buttonText = tr(
+      __DARWIN__ ? 'Open Git Settings' : 'Open git settings'
+    )
+    const ko = getCurrentLanguage() === 'ko'
+    const settingsKo = isGitConfigLocal ? '저장소 설정' : 'Git 옵션'
 
     return (
       <>
-        <p>{user && user.name && `Email: ${user.email}`}</p>
+        <p>
+          {user &&
+            user.name &&
+            (ko ? `이메일: ${user.email}` : `Email: ${user.email}`)}
+        </p>
 
         <p>
-          You can update your {location} git configuration {locationDesc} in
-          your {settings}.
+          {ko ? (
+            <>
+              {isGitConfigLocal ? '이 저장소의' : '전역'} Git 구성을 {settingsKo}
+              에서 업데이트할 수 있습니다.
+            </>
+          ) : (
+            <>
+              You can update your {location} git configuration {locationDesc} in
+              your {settings}.
+            </>
+          )}
         </p>
 
         {!isGitConfigLocal && (
           <p className="secondary-text">
-            You can also set an email local to this repository from the{' '}
-            <LinkButton onClick={this.onRepositorySettingsClick}>
-              repository settings
-            </LinkButton>
-            .
+            {ko ? (
+              <>
+                <LinkButton onClick={this.onRepositorySettingsClick}>
+                  저장소 설정
+                </LinkButton>
+                에서 이 저장소에만 적용되는 이메일을 설정할 수도 있습니다.
+              </>
+            ) : (
+              <>
+                You can also set an email local to this repository from the{' '}
+                <LinkButton onClick={this.onRepositorySettingsClick}>
+                  repository settings
+                </LinkButton>
+                .
+              </>
+            )}
           </p>
         )}
         <Row className="button-row">
@@ -381,20 +410,25 @@ export class CommitMessageAvatar extends React.Component<
     const { user } = this.props
 
     if (user === undefined) {
-      return 'Unknown user'
+      return tr('Unknown user')
     }
 
     const { name, email } = user
+    const ko = getCurrentLanguage() === 'ko'
 
     if (name) {
-      return (
+      return ko ? (
+        <>
+          <strong>{name}</strong>(으)로 커밋
+        </>
+      ) : (
         <>
           Committing as <strong>{name}</strong>
         </>
       )
     }
 
-    return <>Committing with {email}</>
+    return ko ? <>{email}(으)로 커밋</> : <>Committing with {email}</>
   }
 
   private renderPopover() {

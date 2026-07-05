@@ -3,6 +3,7 @@ import { Octicon } from '../octicons'
 import * as octicons from '../octicons/octicons.generated'
 import { LinkButton } from '../lib/link-button'
 import { ITextDiff, LineEndingsChange } from '../../models/diff'
+import { getCurrentLanguage } from '../../lib/i18n'
 
 enum DiffContentsWarningType {
   UnicodeBidiCharacters,
@@ -63,9 +64,19 @@ export class DiffContentsWarning extends React.Component<IDiffContentsWarningPro
   }
 
   private getWarningMessageForItem(item: DiffContentsWarningItem) {
+    const ko = getCurrentLanguage() === 'ko'
     switch (item.type) {
       case DiffContentsWarningType.UnicodeBidiCharacters:
-        return (
+        return ko ? (
+          <>
+            이 diff에는 아래에 표시된 것과 다르게 해석되거나 컴파일될 수 있는
+            양방향 유니코드 텍스트가 포함되어 있습니다. 검토하려면 숨겨진 유니코드
+            문자를 표시하는 편집기에서 파일을 여세요.{' '}
+            <LinkButton uri="https://github.co/hiddenchars">
+              양방향 유니코드 문자에 대해 자세히 알아보기
+            </LinkButton>
+          </>
+        ) : (
           <>
             This diff contains bidirectional Unicode text that may be
             interpreted or compiled differently than what appears below. To
@@ -79,7 +90,15 @@ export class DiffContentsWarning extends React.Component<IDiffContentsWarningPro
 
       case DiffContentsWarningType.LineEndingsChange:
         const { lineEndingsChange } = item
-        return (
+        return ko ? (
+          <>
+            이 파일은 '{lineEndingsChange.from}' 줄바꿈을 사용하지만,{' '}
+            <LinkButton uri="https://docs.github.com/get-started/git-basics/configuring-git-to-handle-line-endings">
+              Git이 변환하도록 설정되어 있어
+            </LinkButton>{' '}
+            다음에 파일을 체크아웃할 때 '{lineEndingsChange.to}'(으)로 변환됩니다.
+          </>
+        ) : (
           <>
             This file uses '{lineEndingsChange.from}' line endings, but{' '}
             <LinkButton uri="https://docs.github.com/get-started/git-basics/configuring-git-to-handle-line-endings">

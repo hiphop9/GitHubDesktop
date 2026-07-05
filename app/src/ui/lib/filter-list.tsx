@@ -1,5 +1,6 @@
 import * as React from 'react'
 import classnames from 'classnames'
+import { tr } from '../../lib/i18n'
 
 import {
   List,
@@ -278,7 +279,7 @@ export class FilterList<
         ref={this.onTextBoxRef}
         displayClearButton={true}
         autoFocus={true}
-        placeholder={this.props.placeholderText || 'Filter'}
+        placeholder={this.props.placeholderText || tr('Filter')}
         className="filter-list-filter-field"
         onValueChanged={this.onFilterValueChanged}
         onEnterPressed={this.onEnterPressed}

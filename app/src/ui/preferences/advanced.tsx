@@ -4,6 +4,7 @@ import { Checkbox, CheckboxValue } from '../lib/checkbox'
 import { LinkButton } from '../lib/link-button'
 import { SamplesURL } from '../../lib/stats'
 import { isWindowsOpenSSHAvailable } from '../../lib/ssh/ssh'
+import { tr } from '../../lib/i18n'
 
 interface IAdvancedPreferencesProps {
   readonly useWindowsOpenSSH: boolean
@@ -87,9 +88,9 @@ export class Advanced extends React.Component<
     return (
       <DialogContent>
         <div className="advanced-section">
-          <h2>Background updates</h2>
+          <h2>{tr('Background updates')}</h2>
           <Checkbox
-            label="Show status icons in the repository list"
+            label={tr('Show status icons in the repository list')}
             value={
               this.props.repositoryIndicatorsEnabled
                 ? CheckboxValue.On
@@ -100,19 +101,19 @@ export class Advanced extends React.Component<
           />
           <div id="periodic-fetch-description" className="settings-description">
             <p>
-              These icons indicate which repositories have local or remote
-              changes, and require the periodic fetching of repositories that
-              are not currently selected.
+              {tr(
+                'These icons indicate which repositories have local or remote changes, and require the periodic fetching of repositories that are not currently selected.'
+              )}
             </p>
             <p>
-              Turning this off will not stop the periodic fetching of your
-              currently selected repository, but may improve overall app
-              performance for users with many repositories.
+              {tr(
+                'Turning this off will not stop the periodic fetching of your currently selected repository, but may improve overall app performance for users with many repositories.'
+              )}
             </p>
           </div>
         </div>
         <div className="advanced-section">
-          <h2>Usage</h2>
+          <h2>{tr('Usage')}</h2>
           <Checkbox
             label={this.reportDesktopUsageLabel()}
             value={
@@ -123,11 +124,11 @@ export class Advanced extends React.Component<
             onChange={this.onReportingOptOutChanged}
           />
         </div>
-        <h2>Network and credentials</h2>
+        <h2>{tr('Network and credentials')}</h2>
         {this.renderSSHSettings()}
         <div className="advanced-section">
           <Checkbox
-            label={'Use Git Credential Manager'}
+            label={tr('Use Git Credential Manager')}
             value={
               this.state.useExternalCredentialHelper
                 ? CheckboxValue.On
@@ -162,7 +163,7 @@ export class Advanced extends React.Component<
     return (
       <div className="advanced-section">
         <Checkbox
-          label="Use system OpenSSH (recommended)"
+          label={tr('Use system OpenSSH (recommended)')}
           value={
             this.props.useWindowsOpenSSH ? CheckboxValue.On : CheckboxValue.Off
           }

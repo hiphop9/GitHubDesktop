@@ -8,6 +8,7 @@ import { Button } from '../lib/button'
 import { Loading } from '../lib/loading'
 import { BrowserRedirectMessage } from '../lib/authentication-form'
 import { SamplesURL } from '../../lib/stats'
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 
 /**
  * The URL to the sign-up page on GitHub.com. Used in conjunction
@@ -33,14 +34,22 @@ export class Start extends React.Component<IStartProps, {}> {
       >
         <div className="start-content">
           <h1 className="welcome-title">
-            Welcome to <span>GitHub Desktop</span>
+            {getCurrentLanguage() === 'ko' ? (
+              <>
+                <span>GitHub Desktop</span>에 오신 것을 환영합니다
+              </>
+            ) : (
+              <>
+                Welcome to <span>GitHub Desktop</span>
+              </>
+            )}
           </h1>
           {!this.props.loadingBrowserAuth ? (
             <>
               <p id="start-description" className="welcome-text">
-                GitHub Desktop is a seamless way to contribute to projects on
-                GitHub and GitHub Enterprise. Sign in below to get started with
-                your existing projects.
+                {tr(
+                  'GitHub Desktop is a seamless way to contribute to projects on GitHub and GitHub Enterprise. Sign in below to get started with your existing projects.'
+                )}
               </p>
             </>
           ) : (
@@ -57,29 +66,29 @@ export class Start extends React.Component<IStartProps, {}> {
               role="link"
             >
               {this.props.loadingBrowserAuth && <Loading />}
-              Sign in to GitHub.com
+              {tr('Sign in to GitHub.com')}
               <Octicon symbol={octicons.linkExternal} />
             </Button>
             {this.props.loadingBrowserAuth ? (
-              <Button onClick={this.cancelBrowserAuth}>Cancel</Button>
+              <Button onClick={this.cancelBrowserAuth}>{tr('Cancel')}</Button>
             ) : (
               <Button onClick={this.signInToEnterprise}>
-                Sign in to GitHub Enterprise
+                {tr('Sign in to GitHub Enterprise')}
               </Button>
             )}
           </div>
           <div className="skip-action-container">
             <p className="welcome-text">
-              New to GitHub?{' '}
+              {tr('New to GitHub?')}{' '}
               <LinkButton
                 uri={CreateAccountURL}
                 className="create-account-link"
               >
-                Create your free account.
+                {tr('Create your free account.')}
               </LinkButton>
             </p>
             <LinkButton className="skip-button" onClick={this.skip}>
-              Skip this step
+              {tr('Skip this step')}
             </LinkButton>
           </div>
         </div>

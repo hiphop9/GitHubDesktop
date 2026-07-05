@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { tr, getCurrentLanguage } from '../../lib/i18n'
 import { Repository } from '../../models/repository'
 import { Dispatcher } from '../dispatcher'
 import { Branch, StartPoint } from '../../models/branch'
@@ -237,7 +238,7 @@ export class CreateBranch extends React.Component<
       >
         <DialogContent>
           <RefNameTextBox
-            label="Name"
+            label={tr('Name')}
             ariaDescribedBy={hasError ? this.ERRORS_ID : undefined}
             initialValue={this.props.initialName}
             onValueChange={this.onBranchNameChange}
@@ -272,7 +273,7 @@ export class CreateBranch extends React.Component<
       return this.props.headerText
     }
 
-    return __DARWIN__ ? 'Create a Branch' : 'Create a branch'
+    return tr(__DARWIN__ ? 'Create a Branch' : 'Create a branch')
   }
 
   private getOkButtonText = (): string => {
@@ -280,7 +281,7 @@ export class CreateBranch extends React.Component<
       return this.props.okButtonText
     }
 
-    return __DARWIN__ ? 'Create Branch' : 'Create branch'
+    return tr(__DARWIN__ ? 'Create Branch' : 'Create branch')
   }
 
   private onBranchNameChange = (name: string) => {
@@ -427,6 +428,23 @@ export class CreateBranch extends React.Component<
     defaultBranch: Branch | null
   ) {
     if (defaultBranch === null || defaultBranch.name === currentBranchName) {
+      if (getCurrentLanguage() === 'ko') {
+        return (
+          <div>
+            새 브랜치는 현재 체크아웃된 브랜치 (<Ref>{currentBranchName}</Ref>)를
+            기준으로 생성됩니다{this.renderForkLinkSuffix()}.{' '}
+            {defaultBranch?.name === currentBranchName && (
+              <>
+                <Ref>{currentBranchName}</Ref>은(는) 이 저장소의{' '}
+                <LinkButton uri="https://help.github.com/articles/setting-the-default-branch/">
+                  기본 브랜치
+                </LinkButton>
+                입니다.
+              </>
+            )}
+          </div>
+        )
+      }
       return (
         <div>
           Your new branch will be based on your currently checked out branch (
@@ -443,14 +461,16 @@ export class CreateBranch extends React.Component<
       const items = [
         {
           title: defaultBranch.name,
-          description:
-            "The default branch in your repository. Pick this to start on something new that's not dependent on your current branch.",
+          description: tr(
+            "The default branch in your repository. Pick this to start on something new that's not dependent on your current branch."
+          ),
           key: StartPoint.DefaultBranch,
         },
         {
           title: currentBranchName,
-          description:
-            'The currently checked out branch. Pick this if you need to build on work done on this branch.',
+          description: tr(
+            'The currently checked out branch. Pick this if you need to build on work done on this branch.'
+          ),
           key: StartPoint.CurrentBranch,
         },
       ]
@@ -539,6 +559,17 @@ export class CreateBranch extends React.Component<
 
   private renderForkLinkSuffix = () => {
     if (isRepositoryWithForkedGitHubRepository(this.props.repository)) {
+      if (getCurrentLanguage() === 'ko') {
+        return (
+          <span>
+            &nbsp;(
+            <LinkButton onClick={this.onForkSettingsClick}>
+              포크 동작 설정
+            </LinkButton>{' '}
+            기준)
+          </span>
+        )
+      }
       return (
         <span>
           &nbsp;as determined by your{' '}
@@ -559,7 +590,7 @@ export class CreateBranch extends React.Component<
   ) => (
     <Row>
       <VerticalSegmentedControl
-        label="Create branch based on…"
+        label={tr('Create branch based on…')}
         items={items}
         selectedKey={selectedValue}
         onSelectionChanged={this.onBaseBranchChanged}

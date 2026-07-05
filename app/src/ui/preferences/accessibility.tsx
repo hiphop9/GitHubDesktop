@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { DialogContent } from '../dialog'
 import { Checkbox, CheckboxValue } from '../lib/checkbox'
+import { tr } from '../../lib/i18n'
 
 interface IAccessibilityPreferencesProps {
   readonly underlineLinks: boolean
@@ -22,9 +23,9 @@ export class Accessibility extends React.Component<
     return (
       <DialogContent>
         <div className="accessibility-section">
-          <h2>Accessibility</h2>
+          <h2>{tr('Accessibility')}</h2>
           <Checkbox
-            label="Underline links"
+            label={tr('Underline links')}
             value={
               this.props.underlineLinks ? CheckboxValue.On : CheckboxValue.Off
             }
@@ -35,13 +36,14 @@ export class Accessibility extends React.Component<
             id="underline-setting-description"
             className="settings-description"
           >
-            When enabled, GitHub Desktop will underline links in commit
-            messages, comments, and other text fields. This can help make links
-            easier to distinguish. {this.renderExampleLink()}
+            {tr(
+              'When enabled, GitHub Desktop will underline links in commit messages, comments, and other text fields. This can help make links easier to distinguish.'
+            )}{' '}
+            {this.renderExampleLink()}
           </p>
 
           <Checkbox
-            label="Show check marks in the diff"
+            label={tr('Show check marks in the diff')}
             value={
               this.props.showDiffCheckMarks
                 ? CheckboxValue.On
@@ -54,9 +56,9 @@ export class Accessibility extends React.Component<
             id="diff-checkmarks-setting-description"
             className="settings-description"
           >
-            When enabled, check marks will be displayed along side the line
-            numbers and groups of line numbers in the diff when committing. When
-            disabled, the line number controls will be less prominent.
+            {tr(
+              'When enabled, check marks will be displayed along side the line numbers and groups of line numbers in the diff when committing. When disabled, the line number controls will be less prominent.'
+            )}
           </p>
         </div>
       </DialogContent>
@@ -72,7 +74,7 @@ export class Accessibility extends React.Component<
 
     return (
       <span className="link-button-component example-link" style={style}>
-        This is an example link
+        {tr('This is an example link')}
       </span>
     )
   }

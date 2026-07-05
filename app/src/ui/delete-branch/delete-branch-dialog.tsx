@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+import { tr } from '../../lib/i18n'
 import { Dispatcher } from '../dispatcher'
 import { Repository } from '../../models/repository'
 import { Branch } from '../../models/branch'
@@ -39,7 +40,7 @@ export class DeleteBranch extends React.Component<
     return (
       <Dialog
         id="delete-branch"
-        title={__DARWIN__ ? 'Delete Branch' : 'Delete branch'}
+        title={tr(__DARWIN__ ? 'Delete Branch' : 'Delete branch')}
         type="warning"
         onSubmit={this.deleteBranch}
         onDismissed={this.props.onDismissed}
@@ -59,7 +60,7 @@ export class DeleteBranch extends React.Component<
           </div>
         </DialogContent>
         <DialogFooter>
-          <OkCancelButtonGroup destructive={true} okButtonText="Delete" />
+          <OkCancelButtonGroup destructive={true} okButtonText={tr('Delete')} />
         </DialogFooter>
       </Dialog>
     )

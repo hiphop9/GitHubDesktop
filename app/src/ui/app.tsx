@@ -27,6 +27,7 @@ import {
   isWindowsAndNoLongerSupportedByElectron,
 } from '../lib/get-os'
 import { MenuEvent, isTestMenuEvent } from '../main-process/menu'
+import { tr } from '../lib/i18n'
 import {
   Repository,
   getGitHubHtmlUrl,
@@ -547,6 +548,10 @@ export class App extends React.Component<IAppProps, IAppState> {
         return this.resizeActiveResizable('decrease-active-resizable-width')
       case 'toggle-changes-filter':
         return this.toggleChangesFilterVisibility()
+      case 'set-language-en':
+        return this.props.dispatcher.setSelectedLanguage('en')
+      case 'set-language-ko':
+        return this.props.dispatcher.setSelectedLanguage('ko')
       default:
         if (isTestMenuEvent(name)) {
           return showTestUI(
@@ -3378,7 +3383,7 @@ export class App extends React.Component<IAppProps, IAppState> {
       <ToolbarDropdown
         icon={icon}
         title={title}
-        description={__DARWIN__ ? 'Current Repository' : 'Current repository'}
+        description={tr(__DARWIN__ ? 'Current Repository' : 'Current repository')}
         tooltip={tooltip}
         foldoutStyle={foldoutStyle}
         onContextMenu={this.onRepositoryToolbarButtonContextMenu}

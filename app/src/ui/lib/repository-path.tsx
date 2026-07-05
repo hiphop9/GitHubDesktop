@@ -6,6 +6,7 @@ import { Button } from './button'
 import { Row } from './row'
 import { getDefaultDir, setDefaultDir } from './default-dir'
 import { showOpenDialog } from '../main-process-proxy'
+import { tr } from '../../lib/i18n'
 import { InputWarning } from './input-description/input-warning'
 
 // We use this instead of sanitizedRepositoryName because it deals with
@@ -182,7 +183,7 @@ export class RepositoryPath extends React.Component<
         <Row>
           <TextBox
             value={this.state.name}
-            label={this.props.nameLabel ?? 'Name'}
+            label={tr(this.props.nameLabel ?? 'Name')}
             placeholder={this.props.namePlaceholder ?? 'name'}
             onValueChanged={this.onNameChanged}
             ariaDescribedBy={this.props.nameAriaDescribedBy}
@@ -194,16 +195,16 @@ export class RepositoryPath extends React.Component<
         <Row>
           <TextBox
             value={this.state.path ?? ''}
-            label={
+            label={tr(
               this.props.pathLabel ?? (__DARWIN__ ? 'Local Path' : 'Local path')
-            }
+            )}
             placeholder={this.props.pathPlaceholder ?? 'path'}
             onValueChanged={this.onPathChanged}
             disabled={loadingPath}
             ariaDescribedBy={this.props.pathAriaDescribedBy}
           />
           <Button onClick={this.showFilePicker} disabled={loadingPath}>
-            Choose…
+            {tr('Choose…')}
           </Button>
         </Row>
       </>

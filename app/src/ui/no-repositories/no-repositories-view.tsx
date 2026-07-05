@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { tr } from '../../lib/i18n'
 import { UiView } from '../ui-view'
 import { Button } from '../lib/button'
 import { Octicon, OcticonSymbol } from '../octicons'
@@ -96,8 +97,10 @@ export class NoRepositoriesView extends React.Component<
       <UiView id="no-repositories">
         <section aria-label="Let's get started!">
           <header>
-            <h1>Let's get started!</h1>
-            <p>Add a repository to GitHub Desktop to start collaborating</p>
+            <h1>{tr("Let's get started!")}</h1>
+            <p>
+              {tr('Add a repository to GitHub Desktop to start collaborating')}
+            </p>
           </header>
 
           <div className="content">
@@ -303,18 +306,22 @@ export class NoRepositoriesView extends React.Component<
     if (this.props.tutorialPaused) {
       return this.renderButtonGroupButton(
         octicons.mortarBoard,
-        __DARWIN__
-          ? 'Return to In Progress Tutorial'
-          : 'Return to in progress tutorial',
+        tr(
+          __DARWIN__
+            ? 'Return to In Progress Tutorial'
+            : 'Return to in progress tutorial'
+        ),
         this.props.onResumeTutorialRepository,
         'submit'
       )
     } else {
       return this.renderButtonGroupButton(
         octicons.mortarBoard,
-        __DARWIN__
-          ? 'Create a Tutorial Repository…'
-          : 'Create a tutorial repository…',
+        tr(
+          __DARWIN__
+            ? 'Create a Tutorial Repository…'
+            : 'Create a tutorial repository…'
+        ),
         this.props.onCreateTutorialRepository,
         'submit'
       )
@@ -324,9 +331,11 @@ export class NoRepositoriesView extends React.Component<
   private renderCloneButton() {
     return this.renderButtonGroupButton(
       octicons.repoClone,
-      __DARWIN__
-        ? 'Clone a Repository from the Internet…'
-        : 'Clone a repository from the Internet…',
+      tr(
+        __DARWIN__
+          ? 'Clone a Repository from the Internet…'
+          : 'Clone a repository from the Internet…'
+      ),
       this.onShowClone,
       undefined,
       !this.isUserSignedIn()
@@ -336,9 +345,11 @@ export class NoRepositoriesView extends React.Component<
   private renderCreateRepositoryButton() {
     return this.renderButtonGroupButton(
       octicons.plus,
-      __DARWIN__
-        ? 'Create a New Repository on your Local Drive…'
-        : 'Create a New Repository on your local drive…',
+      tr(
+        __DARWIN__
+          ? 'Create a New Repository on your Local Drive…'
+          : 'Create a New Repository on your local drive…'
+      ),
       this.props.onCreate
     )
   }
@@ -346,9 +357,11 @@ export class NoRepositoriesView extends React.Component<
   private renderAddExistingRepositoryButton() {
     return this.renderButtonGroupButton(
       octicons.fileDirectory,
-      __DARWIN__
-        ? 'Add an Existing Repository from your Local Drive…'
-        : 'Add an Existing Repository from your local drive…',
+      tr(
+        __DARWIN__
+          ? 'Add an Existing Repository from your Local Drive…'
+          : 'Add an Existing Repository from your local drive…'
+      ),
       this.props.onAdd
     )
   }
@@ -366,8 +379,10 @@ export class NoRepositoriesView extends React.Component<
         <div className="drag-drop-info">
           <Octicon symbol={octicons.lightBulb} />
           <div>
-            <strong>ProTip!</strong> You can drag &amp; drop an existing
-            repository folder here to add it to Desktop
+            <strong>{tr('ProTip!')}</strong>{' '}
+            {tr(
+              'You can drag & drop an existing repository folder here to add it to Desktop'
+            )}
           </div>
         </div>
       </div>

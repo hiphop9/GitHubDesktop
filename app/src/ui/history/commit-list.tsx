@@ -11,6 +11,7 @@ import memoizeOne from 'memoize-one'
 import { IMenuItem, showContextualMenu } from '../../lib/menu-item'
 import { getDotComAPIEndpoint } from '../../lib/api'
 import { clipboard } from 'electron'
+import { tr } from '../../lib/i18n'
 import { RowIndexPath } from '../lib/list/list-row-index-path'
 import { assertNever } from '../../lib/fatal-error'
 import { CommitDragElement } from '../drag-elements/commit-drag-element'
@@ -753,14 +754,14 @@ export class CommitList extends React.Component<
 
     if (canBeAmended) {
       items.push({
-        label: __DARWIN__ ? 'Amend Commit…' : 'Amend commit…',
+        label: tr(__DARWIN__ ? 'Amend Commit…' : 'Amend commit…'),
         action: () => this.props.onAmendCommit?.(commit, isLocal),
       })
     }
 
     if (canBeUndone) {
       items.push({
-        label: __DARWIN__ ? 'Undo Commit…' : 'Undo commit…',
+        label: tr(__DARWIN__ ? 'Undo Commit…' : 'Undo commit…'),
         action: () => {
           if (this.props.onUndoCommit) {
             this.props.onUndoCommit(commit)
@@ -771,7 +772,7 @@ export class CommitList extends React.Component<
     }
 
     items.push({
-      label: __DARWIN__ ? 'Reset to Commit…' : 'Reset to commit…',
+      label: tr(__DARWIN__ ? 'Reset to Commit…' : 'Reset to commit…'),
       action: () => {
         if (this.props.onResetToCommit) {
           this.props.onResetToCommit(commit)
@@ -781,7 +782,7 @@ export class CommitList extends React.Component<
     })
 
     items.push({
-      label: __DARWIN__ ? 'Checkout Commit' : 'Checkout commit',
+      label: tr(__DARWIN__ ? 'Checkout Commit' : 'Checkout commit'),
       action: () => {
         this.props.onCheckoutCommit?.(commit)
       },
@@ -789,7 +790,7 @@ export class CommitList extends React.Component<
     })
 
     items.push({
-      label: __DARWIN__ ? 'Reorder Commit' : 'Reorder commit',
+      label: tr(__DARWIN__ ? 'Reorder Commit' : 'Reorder commit'),
       action: () => {
         this.props.onKeyboardReorder?.([commit])
       },
@@ -798,9 +799,9 @@ export class CommitList extends React.Component<
 
     items.push(
       {
-        label: __DARWIN__
-          ? 'Revert Changes in Commit'
-          : 'Revert changes in commit',
+        label: tr(
+          __DARWIN__ ? 'Revert Changes in Commit' : 'Revert changes in commit'
+        ),
         action: () => {
           if (this.props.onRevertCommit) {
             this.props.onRevertCommit(commit)
@@ -810,9 +811,9 @@ export class CommitList extends React.Component<
       },
       { type: 'separator' },
       {
-        label: __DARWIN__
-          ? 'Create Branch from Commit'
-          : 'Create branch from commit',
+        label: tr(
+          __DARWIN__ ? 'Create Branch from Commit' : 'Create branch from commit'
+        ),
         action: () => {
           if (this.props.onCreateBranch) {
             this.props.onCreateBranch(commit)
@@ -820,7 +821,7 @@ export class CommitList extends React.Component<
         },
       },
       {
-        label: 'Create Tag…',
+        label: tr('Create Tag…'),
         action: () => this.props.onCreateTag?.(commit.sha),
         enabled: this.props.onCreateTag !== undefined,
       }
@@ -840,22 +841,22 @@ export class CommitList extends React.Component<
     const windowTagsLabel = commit.tags.length > 1 ? 'Copy tags' : 'Copy tag'
     items.push(
       {
-        label: __DARWIN__ ? 'Cherry-pick Commit…' : 'Cherry-pick commit…',
+        label: tr(__DARWIN__ ? 'Cherry-pick Commit…' : 'Cherry-pick commit…'),
         action: () => this.props.onCherryPick?.(this.selectedCommits),
         enabled: this.canCherryPick(),
       },
       { type: 'separator' },
       {
-        label: 'Copy SHA',
+        label: tr('Copy SHA'),
         action: () => clipboard.writeText(commit.sha),
       },
       {
-        label: __DARWIN__ ? darwinTagsLabel : windowTagsLabel,
+        label: tr(__DARWIN__ ? darwinTagsLabel : windowTagsLabel),
         action: () => clipboard.writeText(commit.tags.join(' ')),
         enabled: commit.tags.length > 0,
       },
       {
-        label: viewOnGitHubLabel,
+        label: tr(viewOnGitHubLabel),
         action: () => this.props.onViewCommitOnGitHub?.(commit.sha),
         enabled: !isLocal && !!gitHubRepository,
       }
